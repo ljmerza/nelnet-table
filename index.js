@@ -20,11 +20,11 @@ nightmare
   .type('#Password', password)
   .click('#submit-password')
   .wait('#mb1 > li:nth-child(2) > a')
-  .wait(3000)
+  .wait(4000)
   // go to loan details screen
   .click('#mb1 > li:nth-child(2) > a')
   .wait('#area-one .account-row:nth-child(1) a')
-  .wait(2000)
+  .wait(3000)
   // click on show loan details
   .click('#area-one .account-row:nth-child(1) a')
   .wait(1000)
