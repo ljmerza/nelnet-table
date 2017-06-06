@@ -7,20 +7,25 @@ let username = creds.username;
 let password = creds.password;
 
 nightmare
+  // go to website
   .goto('https://www.nelnet.com/welcome')
   .wait('#username')
   .wait(3000)
+  // enter username and wait for password input
   .type('#username', username)
   .click('#submit-username')
   .wait('#Password')
   .wait(2000)
+  // enter password and wait for account screen
   .type('#Password', password)
   .click('#submit-password')
   .wait('#mb1 > li:nth-child(2) > a')
-  .wait(2000)
+  .wait(3000)
+  // go to loan details screen
   .click('#mb1 > li:nth-child(2) > a')
   .wait('#area-one .account-row:nth-child(1) a')
   .wait(2000)
+  // click on show loan details
   .click('#area-one .account-row:nth-child(1) a')
   .wait(1000)
   .click('#area-one .account-row:nth-child(1) a')
