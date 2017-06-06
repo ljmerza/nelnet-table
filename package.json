@@ -1,15 +1,15 @@
 {
   "name": "nelnet-table",
   "version": "1.0.0",
-  "description": "get all loans and compute monthly interest",
+  "description": "gets all netlnet loans, computes monthly interest, and shows loan data in ascii table",
   "main": "index.js",
   "dependencies": {
-    "console-table": "^0.1.2",
     "console.table": "^0.8.0",
     "nightmare": "^2.10.0"
   },
   "devDependencies": {},
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
