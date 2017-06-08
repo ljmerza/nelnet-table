@@ -10,10 +10,14 @@ This script gets all my student loans and displays the principle, interest, accu
 ---
 # how to use
 
-```git clone https://github.com/ljmerza/nelnet-table.git
-npm install```
+```
+git clone https://github.com/ljmerza/nelnet-table.git
+npm install
+```
 
 Rename example.creds.json to creds.json and enter your username and password to log into nelnet then run:
 
-```npm start```
+```
+npm start
+```
 
