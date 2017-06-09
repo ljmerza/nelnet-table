@@ -10,7 +10,7 @@ nightmare
   // go to website
   .goto('https://www.nelnet.com/welcome')
   .wait('#username')
-  .wait(3000)
+  .wait(2000)
   // enter username and wait for password input
   .type('#username', username)
   .click('#submit-username')
@@ -19,21 +19,22 @@ nightmare
   // enter password and wait for account screen
   .type('#Password', password)
   .click('#submit-password')
-  .wait('#mb1 > li:nth-child(2) > a')
-  .wait(4000)
-  // go to loan details screen
-  .click('#mb1 > li:nth-child(2) > a')
-  .wait('#area-one .account-row:nth-child(1) a')
-  .wait(3000)
+  .wait('#mainNavigation li:nth-child(2) a')
+  .wait(1000)
+  // go to loan details page
+  .goto('https://www.nelnet.com/Loan/Details')
+  .wait('.account-row:nth-child(2) a span')
+  .wait(2000)
   // click on show loan details
-  .click('#area-one .account-row:nth-child(1) a')
+  .click('.account-row:nth-child(1) a span')
   .wait(1000)
-  .click('#area-one .account-row:nth-child(1) a')
+  .click('.account-row:nth-child(1) a span')
   .wait(1000)
-  .click('#area-one .account-row:nth-child(2) a')
+  .click('.account-row:nth-child(2) a span')
   .wait(1000)
-  .click('#area-one .account-row:nth-child(2) a')
-
+  .click('.account-row:nth-child(2) a span')
+  .wait(1000)
+  // get loan data
   .evaluate(function () {
         let accurued_interest = Array.from(
         	document.querySelectorAll('.groupLoanDetails .account-detail div:nth-child(3) tr:nth-child(2) td:nth-child(2)'))
@@ -58,6 +59,7 @@ nightmare
     let outstanding = result[3];
 
     let data = [];
+    let total = 0;
 
     for(let i=0;i<accurued_interest.length;i++) {
 
@@ -65,12 +67,16 @@ nightmare
     	let principle_format = parseInt(outstanding[i].replace(/\$|,/g, ''));
     	let interest_per_month = principle_format * monthly_interest;
 
+    	total += principle_format;
+
+
     	data.push({
-    		'accurued_interest': accurued_interest[i],
+    		'accurued interest': accurued_interest[i],
     		'interest': interest[i],
     		'principle': principle[i],
     		'outstanding': outstanding[i],
-    		'interest per month': "$"+ interest_per_month.toFixed(2)
+    		'interest per month': "$"+ interest_per_month.toFixed(2),
+    		'total': i+1 == accurued_interest.length ? '$'+total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ''
     	});
     }
 
