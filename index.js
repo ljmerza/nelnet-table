@@ -34,11 +34,13 @@ module.exports = {
 
       // get all data
       .elements('css selector', '.account-detail div tr td', function (elements) {
+        
         elements.value.forEach( function(element, i) {
           browser.elementIdText(element.ELEMENT, function(result){
             if(result.value) data.push(result.value);
           });
         });
+        
       })
 
       // format data
@@ -49,32 +51,10 @@ module.exports = {
         })
         .filter(function(e){ return e; });
 
-        let tables = [];
-        for(let i=0,l=groups.length;i<l;i++){
-
-          let monthly_interest = parseInt(groups[i][3].replace(/%/, '')) / 100 / 12;
-          let principle_format = parseInt(groups[i][6].replace(/\$|,/g, ''));
-          let interest_per_month = principle_format * monthly_interest;
-
-          total += principle_format;
-
-          tables.push({
-            'due date': groups[i][0],
-            'fees': groups[i][1],
-            'status': groups[i][2],
-            'interest rate': groups[i][3],
-            'accrued interest': groups[i][4],
-            'last payment recieved': groups[i][5],
-            'outstanding balance': groups[i][6],
-            'principle balance': groups[i][7],
-            'interest per month': "$"+ interest_per_month.toFixed(2),
-            'total': i+1 == groups.length ? '$'+total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ''
-          });
-        }
-
+        const tables = await format_data(groups);
         console.log('tables: ', tables);
-
         console.table(tables);
+
       })
       .pause()
 
@@ -83,3 +63,32 @@ module.exports = {
 
     }
   };
+
+
+async function format_data(groups) {
+
+
+  for(let i=0,l=groups.length;i<l;i++){
+    let monthly_interest = parseInt(groups[i][3].replace(/%/, '')) / 100 / 12;
+    let principle_format = parseInt(groups[i][6].replace(/\$|,/g, ''));
+    let interest_per_month = principle_format * monthly_interest;
+
+    total += principle_format;
+
+    tables.push({
+      'due date': groups[i][0],
+      'fees': groups[i][1],
+      'status': groups[i][2],
+      'interest rate': groups[i][3],
+      'accrued interest': groups[i][4],
+      'last payment recieved': groups[i][5],
+      'outstanding balance': groups[i][6],
+      'principle balance': groups[i][7],
+      'interest per month': "$"+ interest_per_month.toFixed(2),
+      'total': i+1 == groups.length ? '$'+total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ''
+    });
+  }
+
+
+  return tables;
+}
