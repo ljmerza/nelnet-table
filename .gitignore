@@ -4,7 +4,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-creds.json
+creds.js
 
 # Runtime data
 pids
