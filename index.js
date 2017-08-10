@@ -1,5 +1,7 @@
 require('console.table');
 
+constc creds = require('creds');
+
 module.exports = {
   'Nelnet': function (browser) {
     const wait = 2000;
@@ -12,12 +14,12 @@ module.exports = {
       // enter usernane
       .waitForElementVisible('#username')
       .pause(wait)
-      .setValue('#username', '')
+      .setValue('#username', creds.username)
       .click('#submit-username')
 
       // enter password
       .waitForElementVisible('#Password')
-      .setValue('#Password', '')
+      .setValue('#Password', creds.password)
       .click('#submit-password')
       .pause(wait)
 
