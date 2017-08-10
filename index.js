@@ -1,88 +1,74 @@
-var Nightmare = require('nightmare');		
-var nightmare = Nightmare({ show: true });
 require('console.table');
 
-let creds = require('./creds');
-let username = creds.username;
-let password = creds.password;
-
-nightmare
-  // go to website
-  .goto('https://www.nelnet.com/welcome')
-  .wait('#username')
-  .wait(2000)
-  // enter username and wait for password input
-  .type('#username', username)
-  .click('#submit-username')
-  .wait('#Password')
-  .wait(2000)
-  // enter password and wait for account screen
-  .type('#Password', password)
-  .click('#submit-password')
-  .wait('#mainNavigation li:nth-child(2) a')
-  .wait(1000)
-  // go to loan details page
-  .goto('https://www.nelnet.com/Loan/Details')
-  .wait('.account-row:nth-child(2) a span')
-  .wait(2000)
-  // click on show loan details
-  .click('.account-row:nth-child(1) a span')
-  .wait(1000)
-  .click('.account-row:nth-child(1) a span')
-  .wait(1000)
-  .click('.account-row:nth-child(2) a span')
-  .wait(1000)
-  .click('.account-row:nth-child(2) a span')
-  .wait(1000)
-  // get loan data
-  .evaluate(function () {
-        let accurued_interest = Array.from(
-        	document.querySelectorAll('.groupLoanDetails .account-detail div:nth-child(3) tr:nth-child(2) td:nth-child(2)'))
-        	.map(element => element.innerText);
-        let interest = Array.from(
-        	document.querySelectorAll('.groupLoanDetails .account-detail div:nth-child(3) tr:nth-child(1) td:nth-child(2) span'))
-        	.map(element => element.innerText);
-        let principle = Array.from(
-        	document.querySelectorAll('.groupLoanDetails .account-detail div:nth-child(4) tr:nth-child(2) td:nth-child(2)'))
-        	.map(element => element.innerText);
-        let outstanding = Array.from(
-        	document.querySelectorAll('.groupLoanDetails .account-detail div:nth-child(4) tr:nth-child(1) td:nth-child(2)'))
-        	.map(element => element.innerText);
-
-        return [accurued_interest, interest, principle, outstanding];
-  })
-  .end()
-  .then(function (result) {
-    let accurued_interest = result[0];
-    let interest = result[1];
-    let principle = result[2];
-    let outstanding = result[3];
-
+module.exports = {
+  'Nelnet': function (browser) {
+    const wait = 2000;
     let data = [];
-    let total = 0;
 
-    for(let i=0;i<accurued_interest.length;i++) {
+    browser
+      // go to nelnet
+      .url('https://www.nelnet.com/welcome')
 
-    	let monthly_interest = parseInt(interest[i].replace(/%/, '')) / 100 / 12;
-    	let principle_format = parseInt(outstanding[i].replace(/\$|,/g, ''));
-    	let interest_per_month = principle_format * monthly_interest;
+      // enter usernane
+      .waitForElementVisible('#username')
+      .pause(wait)
+      .setValue('#username', '')
+      .click('#submit-username')
 
-    	total += principle_format;
+      // enter password
+      .waitForElementVisible('#Password')
+      .setValue('#Password', '')
+      .click('#submit-password')
+      .pause(wait)
+
+      // go to loan details
+      .url('https://www.nelnet.com/Loan/Details')
+      .waitForElementVisible('#maincontent')
+      .pause(wait)
+
+      // open group details
+      .click('.account-row a')
+      .waitForElementVisible('#maincontent')
+
+      // get all data
+      .elements('css selector', '.account-detail div tr td', function (elements) {
+        elements.value.forEach( function(element, i) {
+          browser.elementIdText(element.ELEMENT, function(result){
+            if(result.value) data.push(result.value);
+          });
+        });
+      })
+
+      // format data
+      .perform( () => {
+        const chunk_size = 8;
+        const groups = data.map( (e,i) => { 
+            return i%chunk_size===0 ? data.slice(i,i+chunk_size) : null; 
+        })
+        .filter(function(e){ return e; });
+
+        let tables = [];
+        for(let i=0,l=groups.length;i<l;i++){
+          tables.push({
+            'due date': groups[i][0],
+            'fees': groups[i][1],
+            'status': groups[i][2],
+            'interest rate': groups[i][3],
+            'accrued interest': groups[i][4],
+            'last payment recieved': groups[i][5],
+            'outstanding balance': groups[i][6],
+            'principle balance': groups[i][7]
+          });
+        }
+
+        console.log('tables: ', tables);
+
+        console.table(tables);
+      })
+      .pause()
+
+      .end();
 
 
-    	data.push({
-    		'accurued interest': accurued_interest[i],
-    		'interest': interest[i],
-    		'principle': principle[i],
-    		'outstanding': outstanding[i],
-    		'interest per month': "$"+ interest_per_month.toFixed(2),
-    		'total': i+1 == accurued_interest.length ? '$'+total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ''
-    	});
     }
-
-    console.table(data);
-  })
-  .catch(function (error) {
-    console.error('Search failed:', error);
-  })
-;
+  };
