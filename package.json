@@ -1,26 +1,19 @@
 {
-  "name": "nelnet-table",
+  "name": "night-watch.nelnet",
   "version": "1.0.0",
-  "description": "gets all netlnet loans, computes monthly interest, and shows loan data in ascii table",
+  "description": "displays loans from nelnet in an ascii table",
   "main": "index.js",
   "dependencies": {
-    "console.table": "^0.8.0",
-    "nightmare": "^2.10.0",
-    "nightwatch": "^0.9.15"
+    "ascii-table": "^0.0.9",
+    "nightwatch": "^0.9.16"
   },
-  "devDependencies": {},
+
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node_modules/nightwatch/bin/nightwatch"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ljmerza/nelnet-table.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ljmerza/nelnet-table/issues"
-  },
-  "homepage": "https://github.com/ljmerza/nelnet-table#readme"
+
+  "repository": { 
+  	"type": "git",
+  	"url": "https://github.com/npm/npm.git"
+  }
 }
