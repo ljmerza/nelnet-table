@@ -1,6 +1,6 @@
 require('console.table');
 
-constc creds = require('creds');
+const creds = require('../creds');
 
 module.exports = {
   'Nelnet': function (browser) {
@@ -26,7 +26,7 @@ module.exports = {
       // go to loan details
       .url('https://www.nelnet.com/Loan/Details')
       .waitForElementVisible('#maincontent')
-      .pause(wait)
+      .pause(3000)
 
       // open group details
       .click('.account-row a')
@@ -34,27 +34,50 @@ module.exports = {
 
       // get all data
       .elements('css selector', '.account-detail div tr td', function (elements) {
-        
         elements.value.forEach( function(element, i) {
           browser.elementIdText(element.ELEMENT, function(result){
             if(result.value) data.push(result.value);
           });
         });
-        
       })
 
       // format data
       .perform( () => {
+
+
+        // reformat data
         const chunk_size = 8;
         const groups = data.map( (e,i) => { 
             return i%chunk_size===0 ? data.slice(i,i+chunk_size) : null; 
         })
         .filter(function(e){ return e; });
 
-        const tables = await format_data(groups);
-        console.log('tables: ', tables);
-        console.table(tables);
+        console.log(' groups: ',   groups);
 
+
+        // reformat to console table format
+        let tables = groups.map( (currentValue, index, array) => {
+          const monthly_interest = parseInt(groups[i][3].replace(/%/, '')) / 100 / 12;
+          const principle_format = parseInt(groups[i][6].replace(/\$|,/g, ''));
+          const interest_per_month = principle_format * monthly_interest;
+
+          return {
+            'due date': currentValue[0],
+            'fees': currentValue[1],
+            'status': currentValue[2],
+            'interest rate': currentValue[3],
+            'accrued interest': currentValue[4],
+            'last payment recieved': currentValue[5],
+            'outstanding balance': currentValue[6],
+            'principle balance': currentValue[7],
+            'interest per month': "$"+ interest_per_month.toFixed(2),
+            'total': index+1 == groups.length ? '$'+total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ''
+          };
+        });
+
+        console.log('tables: ', tables);
+
+        console.table(tables);
       })
       .pause()
 
@@ -63,32 +86,3 @@ module.exports = {
 
     }
   };
-
-
-async function format_data(groups) {
-
-
-  for(let i=0,l=groups.length;i<l;i++){
-    let monthly_interest = parseInt(groups[i][3].replace(/%/, '')) / 100 / 12;
-    let principle_format = parseInt(groups[i][6].replace(/\$|,/g, ''));
-    let interest_per_month = principle_format * monthly_interest;
-
-    total += principle_format;
-
-    tables.push({
-      'due date': groups[i][0],
-      'fees': groups[i][1],
-      'status': groups[i][2],
-      'interest rate': groups[i][3],
-      'accrued interest': groups[i][4],
-      'last payment recieved': groups[i][5],
-      'outstanding balance': groups[i][6],
-      'principle balance': groups[i][7],
-      'interest per month': "$"+ interest_per_month.toFixed(2),
-      'total': i+1 == groups.length ? '$'+total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ''
-    });
-  }
-
-
-  return tables;
-}
