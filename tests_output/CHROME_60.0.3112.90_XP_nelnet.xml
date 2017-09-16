@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="1"
+            failures="0"
+            tests="1">
+
+  <testsuite name="nelnet"
+    errors="1" failures="0" hostname="" id="" package="nelnet" skipped="0"
+    tests="1" time="38.04" timestamp="Sun, 13 Aug 2017 01:53:46 GMT">
+  
+    <testcase name="Nelnet" classname="nelnet" time="38.04" assertions="5">
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+
+  
+    <system-err>
+      Error while running perform command: total_int.toString(...).toFixed is not a function
+    at Object.Nelnet (C:\Users\lmerz\Google Drive\Webdev Projects\nelnet-table\test\nelnet.js:53:8)
+    at Module.call (C:\Users\lmerz\Google Drive\Webdev Projects\nelnet-table\node_modules\nightwatch\lib\runner\module.js:62:34)
+    at C:\Users\lmerz\Google Drive\Webdev Projects\nelnet-table\node_modules\nightwatch\lib\runner\testcase.js:70:29
+    at _fulfilled (C:\Users\lmerz\Google Drive\Webdev Projects\nelnet-table\node_modules\q\q.js:834:54)
+    at self.promiseDispatch.done (C:\Users\lmerz\Google Drive\Webdev Projects\nelnet-table\node_modules\q\q.js:863:30)
+    at Promise.promise.promiseDispatch (C:\Users\lmerz\Google Drive\Webdev Projects\nelnet-table\node_modules\q\q.js:796:13)
+    at C:\Users\lmerz\Google Drive\Webdev Projects\nelnet-table\node_modules\q\q.js:556:49
+    at runSingle (C:\Users\lmerz\Google Drive\Webdev Projects\nelnet-table\node_modules\q\q.js:137:13)
+    at flush (C:\Users\lmerz\Google Drive\Webdev Projects\nelnet-table\node_modules\q\q.js:125:13)
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    </system-err>
+  
+
+  
+  </testsuite>
+</testsuites>

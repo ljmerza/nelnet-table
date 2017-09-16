@@ -75,7 +75,7 @@ module.exports = {
             loan[6],loan[7],
             '$'+ interest_per_month.toFixed(2),
             '$'+total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-            '$'+total_int.toString().toFixed(2)
+            '$'+total_int.toFixed(2)
           );
         });
 
