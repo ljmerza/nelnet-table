@@ -38,10 +38,10 @@ module.exports = {
 
       .click('.account-row:nth-child(2) a span')
       .waitForElementVisible('#maincontent')
-      .pause(wait)
+      .pause(5000)
 
       // get all data
-      .elements('css selector', '.account-detail div tr td', function (elements) {
+      .elements('css selector', '.account-detail div tr td', function (elements) {     
         elements.value.forEach( function(element, i) {
           browser.elementIdText(element.ELEMENT, function(result){
             if(result.value) data.push(result.value);
@@ -52,7 +52,6 @@ module.exports = {
       // format data
       .perform( () => {
         let total = 0, total_int = 0;
-
         // reformat data
         const chunk_size = 8;
         const loans = data.map( (e,i) => { 
@@ -81,8 +80,6 @@ module.exports = {
 
         console.log(table.toString())
       })
-      .pause()
-
       .end();
 
 
