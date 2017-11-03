@@ -32,11 +32,11 @@ module.exports = {
       .pause(3000)
 
       // open group details
-      .click('.account-row:nth-child(1) a span')
+      .click('.account-row:nth-child(1) a')
       .waitForElementVisible('#maincontent')
       .pause(wait)
 
-      .click('.account-row:nth-child(2) a span')
+      .click('.account-row:nth-child(2) a')
       .waitForElementVisible('#maincontent')
       .pause(5000)
 
